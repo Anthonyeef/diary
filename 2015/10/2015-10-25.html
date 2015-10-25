@@ -1,0 +1,128 @@
+<!DOCTYPE html><!--[if lte IE 8]>
+<html lang="en" class="lte-ie8">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+<!--<![endif]--><head><meta charset="utf-8"><title>October 25, 2015</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/diary/css/global.css"><link rel="stylesheet" href="/diary/css/tomorrow.css"><link rel="stylesheet" href="/diary/css/diary.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-59628523-1', 'auto');
+ga('send', 'pageview');</script></head><body><header class="header"><div class="index"><a href="/diary/">Index</a></div><h1>October 25, 2015</h1></header><div class="content"><div class="diary"><h2 id="c-">C++</h2>
+<p>I write a simple program to transpose infix to postfix with C++. It&#39;s actually a task from my Data Structure course. And it took me some while to figure out how should it work by using stack. The key point lies on the use of stack for the operator, also when the comming element come out to be left parenthesis and right parenthesis, should it be pushed in the stack or not.</p>
+<p>My solution comes quite different with the others I could find on the internet.Here is my code:</p>
+<pre><code class="lang-C++"><span class="hljs-comment">//Here is the program to generate postfix from infix.</span>
+<span class="hljs-comment">// Comments as instruction are included inside to explain every single code.</span>
+<span class="hljs-comment">// But honestly the idea is from the professor's lide and the textbook page 164.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//Attention:</span>
+<span class="hljs-comment">//- Only support operator : +, -, *, /, %;</span>
+<span class="hljs-comment">//- Operand can only be : 'a' ~ 'z' and 'A' ~ 'Z';</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//The source code is the file name 'main.cpp'. I use Intellij's C&amp;C++ IDE Clion for coding,</span>
+<span class="hljs-comment">// so there is one additional file call CMakeLists.</span>
+<span class="hljs-comment">// It's for the IDE compiler only and I have also compiled this program under g++,</span>
+<span class="hljs-comment">// the execute file is named InfixToPostfix under the same folder.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//Feel free to contact me if you have any question.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//Yifen Wu</span>
+<span class="hljs-comment">//e-mail: anthonyeef@gmail.com</span>
+
+
+<span class="hljs-preprocessor">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-preprocessor">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stack&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isLeftParenthesis</span><span class="hljs-params">(<span class="hljs-keyword">char</span> token)</span> </span>{
+    <span class="hljs-keyword">if</span> (token == <span class="hljs-string">'('</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    } <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isRightParenthesis</span><span class="hljs-params">(<span class="hljs-keyword">char</span> token)</span> </span>{
+    <span class="hljs-keyword">if</span> (token == <span class="hljs-string">')'</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    } <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isOperand</span><span class="hljs-params">(<span class="hljs-keyword">char</span> token)</span> </span>{
+    <span class="hljs-keyword">if</span>(token &lt;= <span class="hljs-string">'z'</span> &amp;&amp; token &gt;= <span class="hljs-string">'a'</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    } <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">if</span>(token &lt;= <span class="hljs-string">'Z'</span> &amp;&amp; token &gt;= <span class="hljs-string">'A'</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    } <span class="hljs-keyword">else</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">isPriority</span><span class="hljs-params">(<span class="hljs-keyword">char</span> token)</span> </span>{
+    <span class="hljs-keyword">int</span> priority;
+    <span class="hljs-keyword">if</span> (token == <span class="hljs-string">'('</span>)
+        priority = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token == <span class="hljs-string">'*'</span> || token == <span class="hljs-string">'/'</span> || token == <span class="hljs-string">'%'</span>)
+        priority = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token == <span class="hljs-string">'+'</span> || token == <span class="hljs-string">'-'</span>)
+        priority = <span class="hljs-number">3</span>;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token == <span class="hljs-string">'#'</span>)
+        priority = <span class="hljs-number">5</span>;
+    <span class="hljs-keyword">return</span> priority;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">string</span> infix, postfix;
+    <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">char</span> x;
+
+<span class="hljs-comment">//    Initialize the stack. Now the top == bottom == '#';</span>
+    <span class="hljs-built_in">stack</span>&lt;<span class="hljs-keyword">char</span>&gt; stack1;
+    stack1.push(<span class="hljs-string">'#'</span>);
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Please enter an expression:"</span> &lt;&lt; endl;
+    <span class="hljs-built_in">cin</span> &gt;&gt; infix;
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"The original expression is:"</span> &lt;&lt; endl;
+    <span class="hljs-built_in">cout</span> &lt;&lt; infix &lt;&lt; endl;
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"The postfix expression is:"</span> &lt;&lt; endl;
+
+    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; infix.length() ; i++) {
+        x = infix[i];
+        <span class="hljs-keyword">if</span>(isOperand(x)) {
+            postfix += x; <span class="hljs-comment">// If it's operand, print;</span>
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(isRightParenthesis(x)) { <span class="hljs-comment">// If it's ')', then clear the stack util '('; thus move '(' and ')' in the stack;</span>
+            <span class="hljs-keyword">while</span> (!isLeftParenthesis(stack1.top())) {
+                postfix += stack1.top();
+                stack1.pop();
+            }
+            stack1.pop();
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isLeftParenthesis(stack1.top())) { <span class="hljs-comment">// It it's '(', push it to the stack;</span>
+            stack1.push(x);
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span>(isPriority(stack1.top()) &lt;= isPriority(x)){ <span class="hljs-comment">// If it's not '(' but other operator, compare the priority with the stack top.</span>
+                postfix += stack1.top();
+                stack1.pop();
+            }
+            stack1.push(x);
+        }
+    }
+
+
+    <span class="hljs-keyword">while</span> (!stack1.empty()) { <span class="hljs-comment">// print the stack but not the '#';</span>
+        <span class="hljs-keyword">if</span> (stack1.top()!= <span class="hljs-string">'#'</span>) {
+            postfix += stack1.top();
+        }
+        stack1.pop();
+    }
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; postfix &lt;&lt; endl;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>Looks not that nice I know...
+And maybe I could make a infix to prefix when I have time.</p>
+</div></div><footer class="footer"><address class="author">Copyright &copy; <a rel="author" href="https://github.com/Anthonyeef" class="author-name"> Anthonyeef </a>-<a href="https://github.com/Anthonyeef/diary-for-daily-reading" class="source-repo">Source</a></address><p>Generated by <a href="https://github.com/joyeecheung/diary" class="site-repo">Joyee Cheung&#39;s diary generator</a></p></footer></body></html>
