@@ -1,0 +1,45 @@
+<!DOCTYPE html><!--[if lte IE 8]>
+<html lang="en" class="lte-ie8">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+<!--<![endif]--><head><meta charset="utf-8"><title>October 29, 2015</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/diary/css/global.css"><link rel="stylesheet" href="/diary/css/tomorrow.css"><link rel="stylesheet" href="/diary/css/diary.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-59628523-1', 'auto');
+ga('send', 'pageview');</script></head><body><header class="header"><div class="index"><a href="/diary/">Index</a></div><h1>October 29, 2015</h1></header><div class="content"><div class="diary"><h2 id="android">Android</h2>
+<h3 id="recyclerview">RecyclerView</h3>
+<p>Thinking about adding <code>OnClickListener</code> to the RecyclerView item in my project. I knew there is not <code>OnClickListener</code> in RecyclerView(so RecyclerView is not one handred percent replacement of ListView I would say) for quite a while, and knowing that there should be some trick to add it.</p>
+<p>Useful resources is here from <a href="http://www.littlerobots.nl/blog/Handle-Android-RecyclerView-Clicks/">Little Robots</a>. And the main consideration is, though there is not <code>OnClickeListener</code> we can use directly, there is one even more powerful tool called <code>OnTouchListener</code>. All we need to do is to customize <code>OnTouchListener</code> by making a <code>ItemClickSupport</code> class.</p>
+<p>Following that post I create the OnClickListener I want and it works very nice.</p>
+<h3 id="snackbar">Snackbar</h3>
+<p>Use <code>Snackbar</code> to replace Toast and test the behavior of <code>click</code> action is really useful. And the impliment of <code>Snackbar</code> is quite similar to <code>Toast</code>.</p>
+<pre><code class="lang-Java">Snackbar.make(parentView, R.string.snackbar_text, Snackbar.LENGTH_LONG)
+  .setAction(R.string.snackbar_action, myOnClickListener)
+  .show(); <span class="hljs-comment">// Don’t forget to show!</span>
+</code></pre>
+<p>The first parameter can be many choice. For example in my case I use the <code>view</code> of the item and it works. Scanning the Google&#39;s document and it says that this function will find the parent view by itself so developer don&#39;t need to worry about it.</p>
+<p>And there is some way to customize the <code>Snackbar</code> to make it colorful:</p>
+<pre><code class="lang-Java">Snackbar.make(parentView, R.string.snackbar_text, Snackbar.LENGTH_LONG)
+ .setAction(R.string.snackbar_action, myOnClickListener)  <span class="hljs-comment">// action text on the right side</span>
+ .setActionTextColor(R.color.green)
+ .setDuration(<span class="hljs-number">3000</span>).show();
+</code></pre>
+<p>The source is from <a href="https://guides.codepath.com/android/Displaying-the-Snackbar">CodePath</a>. I learn quite a lot from this website.</p>
+<h3 id="start-a-fragment-activity-from-a-fragment-activity">Start a Fragment &amp; Activity from a Fragment &amp; Activity</h3>
+<p>There may be four condition: </p>
+<pre><code><span class="hljs-number">1</span>. from <span class="hljs-escape">`f</span>ragment<span class="hljs-escape">` </span>to <span class="hljs-escape">`f</span>ragment<span class="hljs-escape">`
+</span><span class="hljs-number">2</span>. from <span class="hljs-escape">`f</span>ragment<span class="hljs-escape">` </span>to <span class="hljs-escape">`a</span>ctivity<span class="hljs-escape">`
+</span><span class="hljs-number">3</span>. from <span class="hljs-escape">`a</span>ctitity<span class="hljs-escape">` </span>to <span class="hljs-escape">`f</span>ragment<span class="hljs-escape">`
+</span><span class="hljs-number">4</span>. from <span class="hljs-escape">`a</span>ctivity<span class="hljs-escape">` </span>to <span class="hljs-escape">`a</span>ctivity
+</code></pre><p>The last one should be the easiest one. Attention we also need to pass data to the upcoming activity &amp; fragment.</p>
+<ul>
+<li><a href="http://stackoverflow.com/questions/12739909/send-data-from-activity-to-fragment-in-android">link</a></li>
+<li><a href="http://stackoverflow.com/questions/24078307/sending-data-to-a-fragment-instead-of-an-activity-with-a-parcelable-object">link</a></li>
+<li><a href="http://stackoverflow.com/questions/9831728/start-a-fragment-via-intent-within-a-fragment">link</a></li>
+<li><a href="http://stackoverflow.com/questions/9831728/start-a-fragment-via-intent-within-a-fragment">link</a></li>
+</ul>
+<p>(Stop here and prepare for exam tomorrow. XD)</p>
+</div></div><footer class="footer"><address class="author">Copyright &copy; <a rel="author" href="https://github.com/Anthonyeef" class="author-name"> Anthonyeef </a>-<a href="https://github.com/Anthonyeef/diary-for-daily-reading" class="source-repo">Source</a></address><p>Generated by <a href="https://github.com/joyeecheung/diary" class="site-repo">Joyee Cheung&#39;s diary generator</a></p></footer></body></html>
