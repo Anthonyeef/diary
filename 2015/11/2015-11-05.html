@@ -1,0 +1,67 @@
+<!DOCTYPE html><!--[if lte IE 8]>
+<html lang="en" class="lte-ie8">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+<!--<![endif]--><head><meta charset="utf-8"><title>November 5, 2015</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/diary/css/global.css"><link rel="stylesheet" href="/diary/css/tomorrow.css"><link rel="stylesheet" href="/diary/css/diary.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-59628523-1', 'auto');
+ga('send', 'pageview');</script></head><body><header class="header"><div class="index"><a href="/diary/">Index</a></div><h1>November 5, 2015</h1></header><div class="content"><div class="diary"><h2 id="android">Android</h2>
+<ul>
+<li>set full screen<pre><code class="lang-Java">getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+</code></pre>
+</li>
+</ul>
+<h3 id="-read-the-code-of-zhihudaily-http-krelve-com-android-123-html-"><a href="http://krelve.com/android/123.html">Read the code of ZhihuDaily</a></h3>
+<p>This is the note of the above post. The first part of this project is making a <code>splashActivity</code> for the beginning. Only containing one <code>ImageView</code>, the <code>initImage()</code> method do the following things:</p>
+<ul>
+<li>Search the local dir to check if the <code>start.jpg</code> image file exist.</li>
+<li>If nope, set the local image from the project as the start image.</li>
+<li>If yes, decode from the absolute pate and set the image as start image.</li>
+<li>Then call the <code>ScalAnimation</code> to the image. </li>
+<li>Set listener to <code>ScalAnimation</code>. <code>onAnimationEnd</code>, check if there is internet connected.</li>
+<li><p>Yes there is internet:</p>
+<p>  will try <code>AsyncHttpResponseHandler</code> to make a Image call for the beginning image source, which will be set as start image next time.</p>
+<p>  If the image request success, delete the old start image file first, and save the image file then start the <code>MainActivity</code>; If it fails, just go ahead and start the <code>MainActivity</code>.</p>
+</li>
+<li><p>Nope, we don&#39;t have internet at this moment: 
+  Start the <code>MainActivity</code> anyway and make a toast to tell you that you don&#39;t have internet access.</p>
+</li>
+</ul>
+<h4 id="things-should-be-notice-">Things should be notice:</h4>
+<ul>
+<li>Check the internet condition every time I try to make an Internet request. So the <code>Check internet</code> method should be made as a public method and can be use everywhere.</li>
+<li>I like the way it organize the code structure. Here is how it build the <code>HttpUtils</code>:</li>
+</ul>
+<pre><code class="lang-Java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HttpUtils</span> </span>{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> AsyncHttpClient client = <span class="hljs-keyword">new</span> AsyncHttpClient();
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">get</span><span class="hljs-params">(String url, ResponseHandlerInterface responseHandler()</span> </span>{
+        client.get(Constants.BASEURL + url, responseHandler);
+    }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">getImage</span><span class="hljs-params">(String url, ResponseHandlerInterface responseHandler)</span> </span>{
+        client.get(url, responseHandler);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isNetworkConnnected</span><span class="hljs-params">(Context context)</span> </span>{
+        <span class="hljs-keyword">if</span>(context != <span class="hljs-keyword">null</span>) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            <span class="hljs-keyword">if</span>(mNetworkInfo != <span class="hljs-keyword">null</span>) {
+                <span class="hljs-keyword">return</span> mNetworkInfo.isAvalable();
+            }
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+    }
+}
+</code></pre>
+<h3 id="add-drawable-to-textview-">add drawable to <code>TextView</code></h3>
+<pre><code class="lang-Java">android:drawableLeft=<span class="hljs-string">"@drawable/ic_star_white_24dp"</span>
+</code></pre>
+<p>This will set a drawable icon to the left of <code>TextView</code>.</p>
+<h3 id="-android-state-slide-http-yanghui-name-attachments-deepdiveintoandroidrestorationbycyrilmottier-140924114735-phpapp02-pdf-"><a href="http://yanghui.name/attachments/deepdiveintoandroidrestorationbycyrilmottier-140924114735-phpapp02.pdf">Android State slide</a></h3>
+<p>The slide is very enjoyable and take me some time to look through.</p>
+</div></div><footer class="footer"><address class="author">Copyright &copy; <a rel="author" href="https://github.com/Anthonyeef" class="author-name"> Anthonyeef </a>-<a href="https://github.com/Anthonyeef/diary-for-daily-reading" class="source-repo">Source</a></address><p>Generated by <a href="https://github.com/joyeecheung/diary" class="site-repo">Joyee Cheung&#39;s diary generator</a></p></footer></body></html>
