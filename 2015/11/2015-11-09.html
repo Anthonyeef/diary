@@ -1,0 +1,63 @@
+<!DOCTYPE html><!--[if lte IE 8]>
+<html lang="en" class="lte-ie8">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+<!--<![endif]--><head><meta charset="utf-8"><title>November 9, 2015</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/diary/css/global.css"><link rel="stylesheet" href="/diary/css/tomorrow.css"><link rel="stylesheet" href="/diary/css/diary.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-59628523-1', 'auto');
+ga('send', 'pageview');</script></head><body><header class="header"><div class="index"><a href="/diary/">Index</a></div><h1>November 9, 2015</h1></header><div class="content"><div class="diary"><h2 id="android">Android</h2>
+<h3 id="-gson-http-kylewbanks-com-blog-tutorial-android-parsing-json-with-gson-"><a href="http://kylewbanks.com/blog/Tutorial-Android-Parsing-JSON-with-GSON">Gson</a></h3>
+<ul>
+<li><code>SerializedName</code> is the annotation used to denote that the property name may differ from the field name in Api.</li>
+<li><p><code>Expose</code> means exposed for serialization and deserialization.</p>
+</li>
+<li><p>A Restadapter should be implement in the project:</p>
+</li>
+</ul>
+<h3 id="-retrofit-https-github-com-bboyfeiyu-android-tech-frontier-tree-master-issue-7-retrofit-e5-bc-80-e5-8f-91-e6-8c-87-e5-8d-97-"><a href="https://github.com/bboyfeiyu/android-tech-frontier/tree/master/issue-7/Retrofit%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97">Retrofit</a></h3>
+<p>Retrofit turns the http request in to annotations on POJO object&#39;s annotations. Creating an <code>interface</code>, <code>api servive</code>, <code>RestAdapter</code> is needed using Retrofit.</p>
+<ul>
+<li>Example of making an Android client for GitHub. But this one only contains the simple api, not the oauth api.</li>
+</ul>
+<pre><code class="lang-Java">RestAdapter restAdapter = <span class="hljs-keyword">new</span> RestAdapter.Builder()
+        .setEndpoint(API).build();
+gitapi git = restAdapter.create(gitapi.class);
+</code></pre>
+<ul>
+<li><p>Declaring the interface:</p>
+<pre><code class="lang-Java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">GitHubService</span> </span>{
+  <span class="hljs-annotation">@GET</span>(<span class="hljs-string">"/repos/{owner}/{repo}/contributors"</span>)
+  <span class="hljs-function">List&lt;Contributor&gt; <span class="hljs-title">contributors</span> <span class="hljs-params">(
+      @Path(<span class="hljs-string">"owner"</span>)</span> String owner,
+      @<span class="hljs-title">Path</span><span class="hljs-params">(<span class="hljs-string">"repo"</span>)</span> String repo
+      )</span>;
+  }
+</code></pre>
+<p><code>List&lt;Contributor&gt;</code> is the type of the response body. <code>Path</code> is another annotation that point out the substitution in the Api endpoint.</p>
+</li>
+<li><p>Also should make an interface waiting to implement the <code>success</code> method and <code>failure</code> method.</p>
+</li>
+</ul>
+<h3 id="-parceler-http-parceler-org-"><a href="http://parceler.org/">parceler</a></h3>
+<p>An awesome library with fully detail document ;) No more boilerplate source code for <code>writeToParcel()</code> and <code>createFromParcel()</code>.</p>
+<ul>
+<li>Add annotation <code>@Parcel</code> at the beginning of POJO model (and that&#39;s it). This will automatically generate serialization model after compiling.</li>
+<li>Use it in the code with <code>Parcels.wrap(new model)</code>.</li>
+<li><code>wrap</code> object could be used in <code>intent</code> or <code>fragment</code> passing data action.</li>
+</ul>
+<h3 id="conclusion-of-retrofit">Conclusion of Retrofit</h3>
+<p>This post is great: <a href="http://blog.robinchutaux.com/blog/a-smart-way-to-use-retrofit/">A smart way to use retrofit</a></p>
+<ul>
+<li>A POJO model</li>
+<li>An api service interface class to consume the api request(which is implemented with annotation)</li>
+</ul>
+<p>And both of the above class is recommanded to be <code>public</code>, with fast speed handling it from source code.</p>
+<h3 id="retrofit-1-9-and-retrofit-2-beta">Retrofit 1.9 and Retrofit 2 beta</h3>
+<p>As far as I can see, Retrofit 2 makes more sense in the use of interface, the way it declares a method. For example, the api interface, there is a <code>Call</code> in front of the object, which should be more understandable as it&#39;s an api <code>interface</code>.</p>
+<h3 id="-facebook-stetho-http-facebook-github-io-stetho-"><a href="http://facebook.github.io/stetho/">Facebook stetho</a></h3>
+<p>A debug tool which allow developer check the network issue with Chrome browser.</p>
+</div></div><footer class="footer"><address class="author">Copyright &copy; <a rel="author" href="https://github.com/Anthonyeef" class="author-name"> Anthonyeef </a>-<a href="https://github.com/Anthonyeef/diary-for-daily-reading" class="source-repo">Source</a></address><p>Generated by <a href="https://github.com/joyeecheung/diary" class="site-repo">Joyee Cheung&#39;s diary generator</a></p></footer></body></html>
