@@ -1,14 +1,14 @@
 module.exports = {
   author: {
-    name: "Joyee Cheung",
-    url: "https://github.com/joyeecheung"
+    name: "Yifen Wu",
+    url: "https://github.com/anthonyeef"
   },
   repo: {  // for the markdown source
-    content: "https://github.com/joyeecheung/my-tech-diary",
-    as_submodule: 'diary'
+    content: "https://github.com/Anthonyeef/diary-for-daily-reading",
+    as_submodule: 'diary-for-daily-reading'
   },
   base_url: '/diary',  // remote directory for the website
-  ga_id: 'UA-63818301-1',  // Optional: Universal Google Analytics ID
+  ga_id: 'UA-59628523-1',
   title: 'My Tech Diary',
   lang: 'en'
 }
